@@ -82,14 +82,13 @@ nav {
 
 .xpretext {
     position: fixed;
-    width: 60%;
+    width: 50%;
     height: 5px;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     padding-top: 10px;
 }
 

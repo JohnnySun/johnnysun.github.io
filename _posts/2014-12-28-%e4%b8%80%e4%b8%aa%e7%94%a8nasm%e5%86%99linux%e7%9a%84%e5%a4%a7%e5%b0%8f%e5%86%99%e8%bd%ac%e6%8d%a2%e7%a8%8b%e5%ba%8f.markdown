@@ -1,0 +1,85 @@
+---
+layout: post
+status: publish
+published: true
+title: 一个用nasm写的Linux大小写转换程序
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 129
+wordpress_url: http://www.bmysoft.org/?p=129
+date: !binary |-
+  MjAxNC0xMi0yOCAxOTozMTozMiArMDgwMA==
+date_gmt: !binary |-
+  MjAxNC0xMi0yOCAxMTozMTozMiArMDgwMA==
+categories:
+- Linux
+- Asm
+tags: []
+comments: []
+---
+<p>自己用nasm写了一个大小写转换的小程序，哈哈是在圣诞节写的，算不算新年的第一次commit呢</p>
+<p>总结一下：</p>
+<p>int 80h是linux在中断向量表里的中断处理，他会读取eax里的值。</p>
+<p>比如1是exit system call</p>
+<p>3 is system read</p>
+<p>4 is system write</p>
+<p>&nbsp;</p>
+<p>equ在nasm里的用途是计算字符串的长度</p>
+<p>代码如下：</p>
+<pre>; name : uppercaser.asm<br />
+; version : 1.0<br />
+; create time : 12&#47;24&#47;2014<br />
+; Marry Christmas!!!! happy New Year ASM!!!!!<br />
+; last modified : 12&#47;24&#47;2014<br />
+; anthor : JohnnySun<br />
+; nasm -f elf64 -g -F stabs uppercaser.asm<br />
+; ld -o uppercaser uppercaser.o<br />
+;</p>
+<p>section .bss<br />
+ BUFFLEN equ 4096<br />
+ Buff: resb BUFFLEN</p>
+<p>section .data</p>
+<p>section .text<br />
+ global _start</p>
+<p>_start:<br />
+ nop</p>
+<p>read:<br />
+ mov eax, 3 ; use sys_read system call<br />
+ mov ebx, 0 ; use stdin<br />
+ mov ecx, Buff<br />
+ mov edx, BUFFLEN<br />
+ int 80H<br />
+ mov esi, eax ; save sys_read return<br />
+ ;cmp eax, 0 ; if eax = 0 then read EOF<br />
+ ;je Done</p>
+<p> mov ecx, esi<br />
+ mov ebp, Buff</p>
+<p>Scan:<br />
+ dec ecx ;ebp offset -1<br />
+ cmp byte [ebp+ecx], 61h<br />
+ jb Next ; if < a</p>
+<p> cmp byte [ebp+ecx], 7Ah<br />
+ ja Next ; if > b</p>
+<p> ;Now we got<br />
+ sub byte [ebp+ecx], 20h</p>
+<p>Next:<br />
+ cmp ecx, 0<br />
+ jnz Scan</p>
+<p>Write:<br />
+ mov eax, 4 ; use sys_write system_call<br />
+ mov ebx, 1 ; use stdout<br />
+ mov ecx, Buff<br />
+ mov edx, esi<br />
+ int 80H<br />
+ jmp read</p>
+<p>Done:<br />
+ mov eax, 1 ;exit system call<br />
+ mov ebx, 0 ; return 0<br />
+ int 80H<br />
+<&#47;pre></p>

@@ -1,0 +1,159 @@
+---
+layout: post
+status: publish
+published: true
+title: Python正则表达式操作指南
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 58
+wordpress_url: http://www.bmysoft.org/?p=58
+date: !binary |-
+  MjAxNC0wOS0xMCAxMzoxOTo0MyArMDgwMA==
+date_gmt: !binary |-
+  MjAxNC0wOS0xMCAwNToxOTo0MyArMDgwMA==
+categories:
+- 未分类
+tags: []
+comments: []
+---
+<p>[caption id="attachment_61" align="alignnone" width="799"]<a href="http:&#47;&#47;www.bmysoft.org&#47;wp-content&#47;uploads&#47;2014&#47;09&#47;pyre_ebb9ce1c-e5e8-4219-a8ae-7ee620d5f9f1.png"><img class="size-full wp-image-61" src="http:&#47;&#47;www.bmysoft.org&#47;wp-content&#47;uploads&#47;2014&#47;09&#47;pyre_ebb9ce1c-e5e8-4219-a8ae-7ee620d5f9f1.png" alt="Python 正则" width="799" height="1719" &#47;><&#47;a> Python 正则[&#47;caption]</p>
+<table style="color: #000000; font-size: 12px !important; font-family: Tahoma, Helvetica, Arial, 宋体, sans-serif; background-color: #f7fcff;" border="1" cellspacing="0">
+<tbody>
+<tr>
+<td style="font-size: 14px;">Step<&#47;td></p>
+<td style="font-size: 14px;">Matched<&#47;td></p>
+<td style="font-size: 14px;">Explanation<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">1<&#47;td></p>
+<td style="font-size: 14px;">a<&#47;td></p>
+<td style="font-size: 14px;">a 匹配模式<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">2<&#47;td></p>
+<td style="font-size: 14px;">abcbd<&#47;td></p>
+<td style="font-size: 14px;">引擎匹配 [bcd]*，并尽其所能匹配到字符串的结尾<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">3<&#47;td></p>
+<td style="font-size: 14px;">Failure<&#47;td></p>
+<td style="font-size: 14px;">引擎尝试匹配 b，但当前位置已经是字符的最後了，所以失败<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">4<&#47;td></p>
+<td style="font-size: 14px;">abcb<&#47;td></p>
+<td style="font-size: 14px;">退回，[bcd]*尝试少匹配一个字符。<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">5<&#47;td></p>
+<td style="font-size: 14px;">Failure<&#47;td></p>
+<td style="font-size: 14px;">再次尝次b，但在当前最後一位字符是"d"。<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">6<&#47;td></p>
+<td style="font-size: 14px;">abc<&#47;td></p>
+<td style="font-size: 14px;">再次退回，[bcd]*只匹配 "bc"。<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">7<&#47;td></p>
+<td style="font-size: 14px;">abcb<&#47;td></p>
+<td style="font-size: 14px;">再次尝试 b ，这次当前位上的字符正好是 "b"<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+&nbsp;</p>
+<table style="color: #000000; font-size: 12px !important; font-family: Tahoma, Helvetica, Arial, 宋体, sans-serif; background-color: #f7fcff;" border="1" cellspacing="0">
+<tbody>
+<tr>
+<td style="font-size: 14px;">方法&#47;属性<&#47;td></p>
+<td style="font-size: 14px;">作用<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">match()<&#47;td></p>
+<td style="font-size: 14px;">决定 RE 是否在字符串刚开始的位置匹配<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">search()<&#47;td></p>
+<td style="font-size: 14px;">扫描字符串，找到这个 RE 匹配的位置<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">findall()<&#47;td></p>
+<td style="font-size: 14px;">找到 RE 匹配的所有子串，并把它们作为一个列表返回<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">finditer()<&#47;td></p>
+<td style="font-size: 14px;">找到 RE 匹配的所有子串，并把它们作为一个迭代器返回<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+&nbsp;</p>
+<table style="color: #000000; font-size: 12px !important; font-family: Tahoma, Helvetica, Arial, 宋体, sans-serif; background-color: #f7fcff;" border="1" cellspacing="0">
+<tbody>
+<tr>
+<td style="font-size: 14px;">方法&#47;属性<&#47;td></p>
+<td style="font-size: 14px;">作用<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">group()<&#47;td></p>
+<td style="font-size: 14px;">返回被 RE 匹配的字符串<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">start()<&#47;td></p>
+<td style="font-size: 14px;">返回匹配开始的位置<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">end()<&#47;td></p>
+<td style="font-size: 14px;">返回匹配结束的位置<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">span()<&#47;td></p>
+<td style="font-size: 14px;">返回一个元组包含匹配 (开始,结束) 的位置<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+编译标志<br />
+编译标志让你可以修改正则表达式的一些运行方式。在 re 模块中标志可以使用两个名字，一个是全名如 IGNORECASE，一个是缩写，一字母形式如 I。（如果你熟悉 Perl 的模式修改，一字母形式使用同样的字母；例如 re.VERBOSE的缩写形式是 re.X。）多个标志可以通过按位 OR-ing 它们来指定。如 re.I | re.M 被设置成 I 和 M 标志：</p>
+<table style="color: #000000; font-size: 12px !important; font-family: Tahoma, Helvetica, Arial, 宋体, sans-serif; background-color: #f7fcff;" border="1" cellspacing="0">
+<tbody>
+<tr>
+<td style="font-size: 14px;">标志<&#47;td></p>
+<td style="font-size: 14px;">含义<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">DOTALL, S<&#47;td></p>
+<td style="font-size: 14px;">使 . 匹配包括换行在内的所有字符<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">IGNORECASE, I<&#47;td></p>
+<td style="font-size: 14px;">使匹配对大小写不敏感<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">LOCALE, L<&#47;td></p>
+<td style="font-size: 14px;">做本地化识别（locale-aware）匹配<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">MULTILINE, M<&#47;td></p>
+<td style="font-size: 14px;">多行匹配，影响 ^ 和 $<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td style="font-size: 14px;">VERBOSE, X<&#47;td></p>
+<td style="font-size: 14px;">能够使用 REs 的 verbose 状态，使之被组织得更清晰易懂<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table></p>
+<pre style="font-size: 12px;">\d  匹配任何十进制数；它相当于类 [0-9]。<br />
+\D  匹配任何非数字字符；它相当于类 [^0-9]。<br />
+\s  匹配任何空白字符；它相当于类  [ \t\n\r\f\v]。<br />
+\S  匹配任何非空白字符；它相当于类 [^ \t\n\r\f\v]。<br />
+\w  匹配任何字母数字字符；它相当于类 [a-zA-Z0-9_]。<br />
+\W  匹配任何非字母数字字符；它相当于类 [^a-zA-Z0-9_]。<br />
+<&#47;pre><br />
+&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

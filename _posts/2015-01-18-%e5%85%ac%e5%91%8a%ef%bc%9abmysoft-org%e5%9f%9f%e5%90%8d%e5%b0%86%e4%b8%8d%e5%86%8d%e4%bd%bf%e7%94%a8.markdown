@@ -1,0 +1,26 @@
+---
+layout: post
+status: publish
+published: true
+title: 公告：BMYSOFT.ORG域名将不再使用
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 133
+wordpress_url: http://www.libdll.so/?p=133
+date: !binary |-
+  MjAxNS0wMS0xOCAxODozNToxMSArMDgwMA==
+date_gmt: !binary |-
+  MjAxNS0wMS0xOCAxMDozNToxMSArMDgwMA==
+categories:
+- Other
+tags: []
+comments: []
+---
+<p>本站新域名： libdll.so<br />
+六月之后将废弃bmysoft.org ，请大家使用新域名登录网站</p>

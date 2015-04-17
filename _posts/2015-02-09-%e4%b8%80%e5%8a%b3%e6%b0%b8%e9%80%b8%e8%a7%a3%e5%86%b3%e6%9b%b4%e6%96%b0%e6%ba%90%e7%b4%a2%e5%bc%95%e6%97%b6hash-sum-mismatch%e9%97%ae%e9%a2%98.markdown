@@ -1,0 +1,57 @@
+---
+layout: post
+status: publish
+published: true
+title: 一劳永逸解决更新源索引时Hash Sum mismatch问题
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 163
+wordpress_url: http://libdll.so/?p=163
+date: !binary |-
+  MjAxNS0wMi0wOSAyMzo1OToyNyArMDgwMA==
+date_gmt: !binary |-
+  MjAxNS0wMi0wOSAxNTo1OToyNyArMDgwMA==
+categories:
+- Linux
+tags: []
+comments: []
+---
+<p>在 Ubuntu&#47;Debian 下有一个问题经常会困扰大家，就是运行 apt-get update 是出现 Hash校验和不符（Hash Sum mismatch）的提示</p>
+<pre class="">This is a known issue, and is exacerbated for clients behind proxy caches. Some large organisations and ISPs (especially in remote parts of the world) have transparent caches of which you may not be aware.</p>
+<p>The fundamental issue is that the apt repository format is subject to race conditions when a mirror is updated. This problem particularly affects repositories that change rapidly, such as the development release.</p>
+<p>You can track progress on the fix for this in this bug (please mark yourself as "affects me too" in the bug) and this blueprint. But be aware that it is a complex issue and may take more than one release to resolve.<br />
+shareimprove this answer</p>
+<p>answered Jul 5 '12 at 22:21<&#47;pre><br />
+大意是：你所使用的网络供应商，有些会设置一些透明缓存，以增加网络内部速度，减少出口的流量，你获取的某些文件不是源服务器上的真正文件，是从缓存中获取的，当缓存中获取的一些校验信息跟源中不一致的时候，自然提示校验失败，无法继续更新。</p>
+<p>此问题实际上跟apt软件仓库的格式设计有关。新发布的版本的软件仓库更新比较频繁，按道理缓存中的文件应该同步更新，可惜因为多个镜像站点的有快慢，因此造成了缓存无法保证一致性。<br />
+当网络提供商足够有实力，不设至透明缓存时，这个问题是不存在的。这就是为什么有些人反馈使用无线上网卡（移动、联通的3g网络）就一切OK，一单换回长城宽带、或者宽带通就不行了。</p>
+<p>以上就是问题出现的真正原因</p>
+<h3>解决方法呢，就是为APT 配置http sever或者使用apt-fast<&#47;h3><br />
+这里推荐大家使用apt-fast</p>
+<pre class="">Apt-fast<br />
+Apt-fast 是一款替代 apt-get 提升下载速度的软件，安装软件时，通过增加线程使下载软件速度加快。 Apt-fast 已经更新到1.6.4版本，引入配置&ldquo;对话框&rdquo;，在其安装过程中，一步步对话框选择设置，每个用户的配置选项，从而改善和清晰化Apt-fast的初始配置过程。</p>
+<p>命令<br />
+如何安装 apt-fast ? 添加官方 PPA 源(支持ubuntu Lucid, Natty, Oneiric, Precise, Quantal)，打开终端，输入以下命令：</p>
+<p>Ubuntu 11.04~13.10 (out of date)</p>
+<p>sudo apt-get install axel aria2<br />
+sudo apt-add-repository ppa:apt-fast&#47;stable<br />
+sudo apt-get update<br />
+sudo apt-get install apt-fast<br />
+Ubuntu 14.04 and later versions</p>
+<p>sudo add-apt-repository ppa:saiarcot895&#47;myppa<br />
+sudo apt-get update<br />
+sudo apt-get -y install apt-fast<br />
+使用<br />
+安装之后使用方法和apt-get使用一样. 更新源列表</p>
+<p>sudo apt-fast update<br />
+安装Chromium浏览器</p>
+<p>sudo apt-fast install chromium-browser<br />
+更新系统</p>
+<p>sudo apt-fast upgrade<&#47;pre><br />
+获取最新的apt-fast安装方法：<a title="Apt-fast" href="http:&#47;&#47;wiki.ubuntu.org.cn&#47;Apt-fast" target="_blank">http:&#47;&#47;wiki.ubuntu.org.cn&#47;Apt-fast<&#47;a></p>

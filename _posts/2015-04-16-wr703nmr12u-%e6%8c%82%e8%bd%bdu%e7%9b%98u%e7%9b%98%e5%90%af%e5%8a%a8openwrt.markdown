@@ -1,0 +1,62 @@
+---
+layout: post
+status: publish
+published: true
+title: wr703n&#47;mr12u 挂载u盘&u盘启动openwrt
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 233
+wordpress_url: http://libdll.so/?p=233
+date: !binary |-
+  MjAxNS0wNC0xNiAyMTozNDozNCArMDgwMA==
+date_gmt: !binary |-
+  MjAxNS0wNC0xNiAxMzozNDozNCArMDgwMA==
+categories:
+- Linux
+- OpenWrt
+tags: []
+comments: []
+---
+<p>TP-Link的wr703n&#47;mr12u路由器刷openwrt还是很不错的，基于ar71xx的芯片。唯一不足的就是ROM太小了，刷完openwrt后几乎没有空间装其他软件了。很多人会选择去淘宝升级内存。其实完全可以利用他们的usb口进行u盘引导，这样路由器里基本的openwrt仅仅起到了initrd的作用，也减少了路由器变砖的风险。</p>
+<h2>首先我们要安装usb驱动<&#47;h2></p>
+<pre class="code">opkg update<br />
+opkg install kmod-usb-core<br />
+opkg install kmod-usb-uhci<br />
+opkg install kmod-usb-storage<br />
+opkg install kmod-usb2<br />
+opkg install kmod-usb-ohci<br />
+opkg install block-mount<br />
+opkg install kmod-fs-ext4<&#47;pre></p>
+<h2>&nbsp;格式化u盘<&#47;h2></p>
+<pre class="">opkg install e2fsprogs<br />
+mkfs.ext4 &#47;dev&#47;sda<&#47;pre><br />
+如果如果你想用fdisk或者gparted分区可以省略这步</p>
+<h2>拷贝系统到u盘<&#47;h2></p>
+<pre class="">mkdir &#47;tmp&#47;root<br />
+mount &#47;dev&#47;sda1 &#47;mnt　　　　<br />
+mount -o bind &#47; &#47;tmp&#47;root<br />
+cp &#47;tmp&#47;root&#47;* &#47;mnt -a<br />
+umount &#47;tmp&#47;root<&#47;pre></p>
+<h2>编辑&#47;etc&#47;config&#47;fstab， 加入以下内容，如果你的openwrt版本是12年左右的，建议不要使用这个，老的openwrt不支持直接挂载为根<&#47;h2></p>
+<pre class="">config mount 　　　　　　　　　　　　#把sda1分区挂载为系统<br />
+　　option target &#47;    　　　 #选择将sda1分区挂载到当前系统的哪一个文件目录下，此处可以选择默认<br />
+　　option device &#47;dev&#47;sda　　　 #需要挂载的设备，&#47;dev&#47;sda1<br />
+　　option fstype ext3　　　　　　 #文件系统格式ext3<br />
+　　option options rw,sync　　　　#读写，以及同步权限<br />
+　　option enabled 1　　　　　　　 #是否需要启动<br />
+　　option enabled_fsck 0　　　　 #是否需要启动检查<&#47;pre><br />
+老的openwrt可以使用如下代码</p>
+<pre class="">config mount 　　　　　　　　　　　　#把sda1分区挂载为系统<br />
+　　option device &#47;dev&#47;sda　　　 #需要挂载的设备，&#47;dev&#47;sda1<br />
+　　option fstype ext3　　　　　　 #文件系统格式ext3<br />
+　　option options rw,sync　　　　#读写，以及同步权限<br />
+　　option enabled 1　　　　　　　 #是否需要启动<br />
+　　option enabled_fsck 0　　　　 #是否需要启动检查<br />
+　　option is_rootfs　1　　　　　　#是否作为根文件系统<&#47;pre><br />
+重启你的设备吧，再也不用担心空间了。</p>

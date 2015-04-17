@@ -1,0 +1,25 @@
+---
+layout: post
+status: publish
+published: true
+title: 感觉美国ATNT的纯数据流量卡并不便宜
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 41
+wordpress_url: http://www.bmysoft.org/?p=41
+date: !binary |-
+  MjAxNC0wOC0yOCAyMzozMDo0OSArMDgwMA==
+date_gmt: !binary |-
+  MjAxNC0wOC0yOCAxNTozMDo0OSArMDgwMA==
+categories:
+- 未分类
+tags: []
+comments: []
+---
+<p><a href="http:&#47;&#47;www.bmysoft.org&#47;wp-content&#47;uploads&#47;2014&#47;08&#47;2014-08-28-232837的屏幕截图.png"><img class="alignnone size-full wp-image-42" src="http:&#47;&#47;www.bmysoft.org&#47;wp-content&#47;uploads&#47;2014&#47;08&#47;2014-08-28-232837的屏幕截图.png" alt="2014-08-28 23:28:37的屏幕截图" width="1366" height="768" &#47;><&#47;a></p>

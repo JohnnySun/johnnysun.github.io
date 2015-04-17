@@ -1,0 +1,694 @@
+---
+layout: post
+status: publish
+published: true
+title: AT&T（GAS）汇编指令小集
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 88
+wordpress_url: http://www.bmysoft.org/?p=88
+date: !binary |-
+  MjAxNC0xMS0wNiAyMzoxMTo1MSArMDgwMA==
+date_gmt: !binary |-
+  MjAxNC0xMS0wNiAxNToxMTo1MSArMDgwMA==
+categories:
+- Kernel&#47;Devices
+- Asm
+tags: []
+comments: []
+---
+<p>GAS中每个操作都是有一个字符的后缀，表明操作数的大小。</p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="189">
+<p align="center">C声明<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="94">
+<p align="center">GAS后缀<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="108">
+<p align="center">大小(字节)<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">
+<p align="center">char<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="94">
+<p align="center">b<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="108">
+<p align="center">1<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">
+<p align="center">short<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="94">
+<p align="center">w<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="108">
+<p align="center">2<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">
+<p align="center">(unsigned) int &#47; long &#47; char*<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="94">
+<p align="center">l<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="108">
+<p align="center">4<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">
+<p align="center">float<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="94">
+<p align="center">s<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="108">
+<p align="center">4<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">
+<p align="center">double<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="94">
+<p align="center">l<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="108">
+<p align="center">8<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">
+<p align="center">long double<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="94">
+<p align="center">t<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="108">
+<p align="center">10&#47;12<&#47;p><br />
+<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+注意：GAS使用后缀&ldquo;l&rdquo;同时表示4字节整数和8字节双精度浮点数，这不会产生歧义因为浮点数使用的是完全不同的指令和寄存器。</p>
+<p><strong>操作数格式：<&#47;strong></p>
+<table border="1" width="607" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="94">
+<p align="center">格式<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">操作数值<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">名称<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">样例（GAS = C语言）<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">$Imm<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">Imm<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">立即数寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">$1 = 1<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">Ea<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">R[Ea]<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">寄存器寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">%eax = eax<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">Imm<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">M[Imm]<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">绝对寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">0x104 = *0x104<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">（Ea）<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">M[R[Ea]]<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">间接寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">（%eax）= *eax<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">Imm(Ea)<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">M[Imm+R[Ea]]<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">(基址+偏移量)寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">4(%eax) = *(4+eax)<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">（Ea,Eb）<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">M[R[Ea]+R[Eb]]<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">变址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">(%eax,%ebx) = *(eax+ebx)<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">Imm（Ea,Eb）<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">M[Imm+R[Ea]+R[Eb]]<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">9(%eax,%ebx)= *(9+eax+ebx)<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">(,Ea,s)<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">M[R[Ea]*s]<&#47;p><br />
+<&#47;td></p>
+<td width="139">
+<p align="center">伸缩化变址寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">(,%eax,4)= *(eax*4)<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">Imm(,Ea,s)<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">M[Imm+R[Ea]*s]<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">伸缩化变址寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">0xfc(,%eax,4)= *(0xfc+eax*4)<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">(Ea,Eb,s)<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">M(R[Ea]+R[Eb]*s)<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">伸缩化变址寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">(%eax,%ebx,4) = *(eax+ebx*4)<&#47;p><br />
+<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="94">
+<p align="center">Imm(Ea,Eb,s)<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="159">
+<p align="center">M(Imm+R[Ea]+R[Eb]*s)<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="139">
+<p align="center">伸缩化变址寻址<&#47;p><br />
+<&#47;td></p>
+<td valign="top" width="216">
+<p align="center">8(%eax,%ebx,4) = *(8+eax+ebx*4)<&#47;p><br />
+<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+注：M[xx]表示在存储器中xx地址的值，R[xx]表示寄存器xx的值，这种表示方法将寄存器、内存都看出一个大数组的形式。</p>
+<p><strong>数据传送指令：<&#47;strong></p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="189">指令<&#47;td></p>
+<td valign="top" width="189">效果<&#47;td></p>
+<td valign="top" width="189">描述<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">movl S,D<&#47;td></p>
+<td valign="top" width="189">D <-- S<&#47;td></p>
+<td valign="top" width="189">传双字<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">movw S,D<&#47;td></p>
+<td valign="top" width="189">D <-- S<&#47;td></p>
+<td valign="top" width="189">传字<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">movb S,D<&#47;td></p>
+<td valign="top" width="189">D <-- S<&#47;td></p>
+<td valign="top" width="189">传字节<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">movsbl S,D<&#47;td></p>
+<td valign="top" width="189">D <-- 符号扩展S<&#47;td></p>
+<td valign="top" width="189">符号位填充(字节->双字)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">movzbl S,D<&#47;td></p>
+<td valign="top" width="189">D <-- 零扩展S<&#47;td></p>
+<td valign="top" width="189">零填充(字节->双字)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">pushl S<&#47;td></p>
+<td valign="top" width="189">R[%esp] <-- R[%esp] &ndash; 4;M[R[%esp]] <-- S<&#47;td></p>
+<td valign="top" width="189">压栈<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">popl D<&#47;td></p>
+<td valign="top" width="189">D <-- M[R[%esp]]；R[%esp] <-- R[%esp] + 4;<&#47;td></p>
+<td valign="top" width="189">出栈<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+注：均假设栈往低地址扩展。</p>
+<p><strong>算数和逻辑操作地址：<&#47;strong></p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="189">指令<&#47;td></p>
+<td valign="top" width="189">效果<&#47;td></p>
+<td valign="top" width="189">描述<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">leal S,D<&#47;td></p>
+<td valign="top" width="189">D = &amp;S<&#47;td></p>
+<td valign="top" width="189">movl地版，S地址入D，D仅能是寄存器<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">incl D<&#47;td></p>
+<td valign="top" width="189">D++<&#47;td></p>
+<td valign="top" width="189">加1<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">decl D<&#47;td></p>
+<td valign="top" width="189">D--<&#47;td></p>
+<td valign="top" width="189">减1<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">negl D<&#47;td></p>
+<td valign="top" width="189">D = -D<&#47;td></p>
+<td valign="top" width="189">取负<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">notl D<&#47;td></p>
+<td valign="top" width="189">D = ~D<&#47;td></p>
+<td valign="top" width="189">取反<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">addl S,D<&#47;td></p>
+<td valign="top" width="189">D = D + S<&#47;td></p>
+<td valign="top" width="189">加<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">subl S,D<&#47;td></p>
+<td valign="top" width="189">D = D &ndash; S<&#47;td></p>
+<td valign="top" width="189">减<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">imull S,D<&#47;td></p>
+<td valign="top" width="189">D = D*S<&#47;td></p>
+<td valign="top" width="189">乘<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">xorl S,D<&#47;td></p>
+<td valign="top" width="189">D = D ^ S<&#47;td></p>
+<td valign="top" width="189">异或<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">orl S,D<&#47;td></p>
+<td valign="top" width="189">D = D | S<&#47;td></p>
+<td valign="top" width="189">或<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">andl S,D<&#47;td></p>
+<td valign="top" width="189">D = D &amp; S<&#47;td></p>
+<td valign="top" width="189">与<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">sall k,D<&#47;td></p>
+<td valign="top" width="189">D = D << k<&#47;td></p>
+<td valign="top" width="189">左移<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">shll k,D<&#47;td></p>
+<td valign="top" width="189">D = D << k<&#47;td></p>
+<td valign="top" width="189">左移(同sall)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">sarl k,D<&#47;td></p>
+<td valign="top" width="189">D = D >> k<&#47;td></p>
+<td valign="top" width="189">算数右移<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="189">shrl k,D<&#47;td></p>
+<td valign="top" width="189">D = D >> k<&#47;td></p>
+<td valign="top" width="189">逻辑右移<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+<strong>特殊算术操作：<&#47;strong></p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="115">指令<&#47;td></p>
+<td valign="top" width="276">效果<&#47;td></p>
+<td valign="top" width="177">描述<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="115">imull S<&#47;td></p>
+<td valign="top" width="276">R[%edx]:R[%eax] = S * R[%eax]<&#47;td></p>
+<td valign="top" width="177">无符号64位乘<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="115">mull S<&#47;td></p>
+<td valign="top" width="276">R[%edx]:R[%eax] = S * R[%eax]<&#47;td></p>
+<td valign="top" width="177">有符号64位乘<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="115">cltd S<&#47;td></p>
+<td valign="top" width="276">R[%edx]:R[%eax] = 符号位扩展R[%eax]<&#47;td></p>
+<td valign="top" width="177">转换为4字节<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="115">idivl S<&#47;td></p>
+<td valign="top" width="276">R[%edx] = R[%edx]:R[%eax] % S;R[%eax] = R[%edx]:R[%eax] &#47; S;<&#47;td></p>
+<td valign="top" width="177">有符号除法，保存余数和商<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="115">divl S<&#47;td></p>
+<td valign="top" width="276">R[%edx] = R[%edx]:R[%eax] % S;R[%eax] = R[%edx]:R[%eax] &#47; S;<&#47;td></p>
+<td valign="top" width="177">无符号除法，保存余数和商<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+注：64位数通常存储为，高32位放在edx，低32位放在eax。</p>
+<p><strong>条件码：<&#47;strong></p>
+<p>条件码寄存器描述了最近的算数或逻辑操作的属性。</p>
+<p>CF：进位标志，最高位产生了进位，可用于检查无符号数溢出。</p>
+<p>OF：溢出标志，二进制补码溢出&mdash;&mdash;正溢出或负溢出。</p>
+<p>ZF：零标志，结果为0。</p>
+<p>SF：符号标志，操作结果为负。</p>
+<p><strong>比较指令：<&#47;strong></p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="127">指令<&#47;td></p>
+<td valign="top" width="96">基于<&#47;td></p>
+<td valign="top" width="168">描述<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="127">cmpb S2,S1<&#47;td></p>
+<td valign="top" width="96">S1 &ndash; S2<&#47;td></p>
+<td valign="top" width="168">比较字节，差关系<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="127">testb S2,S1<&#47;td></p>
+<td valign="top" width="96">S1 &amp; S2<&#47;td></p>
+<td valign="top" width="168">测试字节，与关系<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="127">cmpw S2,S1<&#47;td></p>
+<td valign="top" width="96">S1 &ndash; S2<&#47;td></p>
+<td valign="top" width="168">比较字，差关系<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="127">testw S2,S1<&#47;td></p>
+<td valign="top" width="96">S1 &amp; S2<&#47;td></p>
+<td valign="top" width="168">测试字，与关系<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="127">cmpl S2,S1<&#47;td></p>
+<td valign="top" width="96">S1 &ndash; S2<&#47;td></p>
+<td valign="top" width="168">比较双字，差关系<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="127">testl S2,S1<&#47;td></p>
+<td valign="top" width="96">S1 &amp; S2<&#47;td></p>
+<td valign="top" width="168">测试双字，与关系<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+<strong>访问条件码指令：<&#47;strong></p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="91">指令<&#47;td></p>
+<td valign="top" width="84">同义名<&#47;td></p>
+<td valign="top" width="156">效果<&#47;td></p>
+<td valign="top" width="168">设置条件<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">sete D<&#47;td></p>
+<td valign="top" width="84">setz<&#47;td></p>
+<td valign="top" width="156">D = ZF<&#47;td></p>
+<td valign="top" width="168">相等&#47;零<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">setne D<&#47;td></p>
+<td valign="top" width="84">setnz<&#47;td></p>
+<td valign="top" width="156">D = ~ZF<&#47;td></p>
+<td valign="top" width="168">不等&#47;非零<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">sets D<&#47;td></p>
+<td valign="top" width="84"><&#47;td></p>
+<td valign="top" width="156">D = SF<&#47;td></p>
+<td valign="top" width="168">负数<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">setns D<&#47;td></p>
+<td valign="top" width="84"><&#47;td></p>
+<td valign="top" width="156">D = ~SF<&#47;td></p>
+<td valign="top" width="168">非负数<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">setg D<&#47;td></p>
+<td valign="top" width="84">setnle<&#47;td></p>
+<td valign="top" width="156">D = ~(SF ^OF) &amp; ZF<&#47;td></p>
+<td valign="top" width="168">大于（有符号>）<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">setge D<&#47;td></p>
+<td valign="top" width="84">setnl<&#47;td></p>
+<td valign="top" width="156">D = ~(SF ^OF)<&#47;td></p>
+<td valign="top" width="168">小于等于(有符号>=)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">setl D<&#47;td></p>
+<td valign="top" width="84">setnge<&#47;td></p>
+<td valign="top" width="156">D = SF ^ OF<&#47;td></p>
+<td valign="top" width="168">小于(有符号<)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">setle D<&#47;td></p>
+<td valign="top" width="84">setng<&#47;td></p>
+<td valign="top" width="156">D = (SF ^ OF) | ZF<&#47;td></p>
+<td valign="top" width="168">小于等于(有符号<=)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">seta D<&#47;td></p>
+<td valign="top" width="84">setnbe<&#47;td></p>
+<td valign="top" width="156">D = ~CF &amp; ~ZF<&#47;td></p>
+<td valign="top" width="168">超过(无符号>)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">setae D<&#47;td></p>
+<td valign="top" width="84">setnb<&#47;td></p>
+<td valign="top" width="156">D = ~CF<&#47;td></p>
+<td valign="top" width="168">超过或等于(无符号>=)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">setb D<&#47;td></p>
+<td valign="top" width="84">setnae<&#47;td></p>
+<td valign="top" width="156">D = CF<&#47;td></p>
+<td valign="top" width="168">低于(无符号<)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="91">setbe D<&#47;td></p>
+<td valign="top" width="84">setna<&#47;td></p>
+<td valign="top" width="156">D = CF | ZF<&#47;td></p>
+<td valign="top" width="168">低于或等于(无符号<=)<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+<strong>跳转指令：<&#47;strong></p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="123">指令<&#47;td></p>
+<td valign="top" width="72">同义名<&#47;td></p>
+<td valign="top" width="120">跳转条件<&#47;td></p>
+<td valign="top" width="168">描述<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jmp &nbsp; Label<&#47;td></p>
+<td valign="top" width="72"><&#47;td></p>
+<td valign="top" width="120">1<&#47;td></p>
+<td valign="top" width="168">直接跳转<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jmp &nbsp; *Operand<&#47;td></p>
+<td valign="top" width="72"><&#47;td></p>
+<td valign="top" width="120">1<&#47;td></p>
+<td valign="top" width="168">间接跳转<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">je &nbsp; &nbsp; Label<&#47;td></p>
+<td valign="top" width="72">jz<&#47;td></p>
+<td valign="top" width="120">ZF<&#47;td></p>
+<td valign="top" width="168">等于&#47;零<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jne &nbsp; &nbsp;Label<&#47;td></p>
+<td valign="top" width="72">jnz<&#47;td></p>
+<td valign="top" width="120">~ZF<&#47;td></p>
+<td valign="top" width="168">不等&#47;非零<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">js &nbsp; &nbsp; Label<&#47;td></p>
+<td valign="top" width="72"><&#47;td></p>
+<td valign="top" width="120">SF<&#47;td></p>
+<td valign="top" width="168">负数<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jnz &nbsp; &nbsp;Label<&#47;td></p>
+<td valign="top" width="72"><&#47;td></p>
+<td valign="top" width="120">~SF<&#47;td></p>
+<td valign="top" width="168">非负数<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jg &nbsp; &nbsp; Label<&#47;td></p>
+<td valign="top" width="72">jnle<&#47;td></p>
+<td valign="top" width="120">~(SF^OF) &amp; ~ZF<&#47;td></p>
+<td valign="top" width="168">大于(有符号>)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jge &nbsp; &nbsp;Label<&#47;td></p>
+<td valign="top" width="72">jnl<&#47;td></p>
+<td valign="top" width="120">~(SF ^ OF)<&#47;td></p>
+<td valign="top" width="168">大于等于(有符号>=)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jl &nbsp; &nbsp; Label<&#47;td></p>
+<td valign="top" width="72">jnge<&#47;td></p>
+<td valign="top" width="120">SF ^ OF<&#47;td></p>
+<td valign="top" width="168">小于（有符号<）<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jle &nbsp; &nbsp; Label<&#47;td></p>
+<td valign="top" width="72">jng<&#47;td></p>
+<td valign="top" width="120">(SF ^ OF) | ZF<&#47;td></p>
+<td valign="top" width="168">小于等于(有符号<=)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">ja &nbsp; &nbsp; Label<&#47;td></p>
+<td valign="top" width="72">jnbe<&#47;td></p>
+<td valign="top" width="120">~CF &amp; ~ZF<&#47;td></p>
+<td valign="top" width="168">超过(无符号>)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jae &nbsp; &nbsp;Label<&#47;td></p>
+<td valign="top" width="72">jnb<&#47;td></p>
+<td valign="top" width="120">~CF<&#47;td></p>
+<td valign="top" width="168">超过或等于(无符号>=)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jb &nbsp; &nbsp; Label<&#47;td></p>
+<td valign="top" width="72">jnae<&#47;td></p>
+<td valign="top" width="120">CF<&#47;td></p>
+<td valign="top" width="168">低于(无符号<)<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="123">jbe &nbsp; &nbsp;Label<&#47;td></p>
+<td valign="top" width="72">jna<&#47;td></p>
+<td valign="top" width="120">CF | ZF<&#47;td></p>
+<td valign="top" width="168">低于或等于(无符号<=)<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+<strong>转移控制指令：（函数调用）：<&#47;strong></p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="129">指令<&#47;td></p>
+<td valign="top" width="250">描述<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="129">call &nbsp; &nbsp;Label<&#47;td></p>
+<td rowspan="2" valign="top" width="250">过程调用，返回地址入栈，跳转到调用过程起始处，返回地址是call后面那条指令的地址<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="129">call &nbsp; &nbsp;*Operand<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td valign="top" width="129">leave<&#47;td></p>
+<td valign="top" width="250">为返回准备好栈，为ret准备好栈，主要是弹出函数内的栈使用及%ebp<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+&nbsp;</p>

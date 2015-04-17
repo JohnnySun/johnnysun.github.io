@@ -1,0 +1,44 @@
+---
+layout: post
+status: publish
+published: true
+title: 浅谈关于串口通信中的波特率
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 44
+wordpress_url: http://www.bmysoft.org/?p=44
+date: !binary |-
+  MjAxNC0wOC0zMCAyMDowNzoxOCArMDgwMA==
+date_gmt: !binary |-
+  MjAxNC0wOC0zMCAxMjowNzoxOCArMDgwMA==
+categories:
+- C&#47;CPP
+- Adruino
+tags: []
+comments: []
+---
+<p style="color: #464646;">1：比特率：9600bps<&#47;p></p>
+<p style="color: #464646;">就是每秒中传输9600bit，也就是相当于每一秒中划分成了9600等份。<&#47;p></p>
+<p style="color: #464646;">如此，那么每1bit的时间就是1&#47;9600秒=104.166666666666666666666666<wbr &#47;>66667us。约0.1ms。既然是9600等份，即每1bit紧接着下一个比特，不存在额外的间隔。也不管是啥起始bit，数据bit，奇偶bit，停止bit。<&#47;p></p>
+<p style="color: #464646;">2：帧格式，帧间隔。<&#47;p></p>
+<p style="color: #464646;">在电脑里，也就是超级终端等的端口设置。电脑的默认端口设置，也就是默认帧格式是：8个数据bit，1个停止bit，（起始1bit 是必须的）默认无奇偶，无流控。<&#47;p></p>
+<p style="color: #464646;">则实际就是10bit为1帧。一秒中可以发送9600&#47;10=960个帧，也就是960字符，因为一帧里只有1个字符，1字符就是帧里面的8个数据bit<&#47;p></p>
+<p style="color: #464646;">3：串口通讯<&#47;p></p>
+<p style="color: #464646;">串口当然可以连续，没有时间间隔地发送帧，默认情形下电脑在9600bps下可以发送960帧。<&#47;p></p>
+<p style="color: #464646;">但在实际工作中，在异步通讯下，一般需要一个交互过程，所以，电脑发送一个帧，或者若干帧，还需要等待从设备的应答，并不是一直发送的。有问有答地实现编程者的目标。<&#47;p></p>
+<p style="color: #464646;"><&#47;p></p>
+<p style="color: #464646;">串口通信必须要设定波特率，本设计采用的波特率为9 600 bit／s。产生波特率的时钟频率是越高越好，这样才可产生较高且精确的波特率。设计选用50M主频率要产生9600bit／s波特率，每传送一位数据需要5 208．33个时钟周期。取一个最接近的数是5 208，则波特率为9 600．61，其误差约为0．006％，误码率很低可以确保通信正常。<&#47;p></p>
+<pre style="color: #464646;">用于adruino中delayMicroseconds来从Serial中逐字读取<br />
+相关代码：<br />
+#define BAUD_RATE 115200<br />
+#define TRANS_SPEED 1000000&#47;BAUD_RATE<br />
+int transfer_speed = TRANS_SPEED;<br />
+delayMicroseconds(transfer_speed * 10 + 25);<br />
+&#47;&#47;+25 used to offset deviation</p>
+<p><&#47;pre></p>

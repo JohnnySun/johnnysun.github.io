@@ -1,0 +1,34 @@
+---
+layout: post
+status: publish
+published: true
+title: 博客升级完成
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 135
+wordpress_url: http://libdll.so/?p=135
+date: !binary |-
+  MjAxNS0wMS0xOSAwMTo0ODo0OCArMDgwMA==
+date_gmt: !binary |-
+  MjAxNS0wMS0xOCAxNzo0ODo0OCArMDgwMA==
+categories:
+- Other
+tags: []
+comments:
+- id: 40
+  author: JohnnySun
+  author_email: bmy001@gmail.com
+  author_url: http://libdll.so
+  date: !binary |-
+    MjAxNS0wMS0yMCAwMTo1MjoyNSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxNS0wMS0xOSAxNzo1MjoyNSArMDgwMA==
+  content: 已经加入了一些谷歌广告和谷歌分析，我们会尽量保持页面的整洁，杜绝弹窗。
+---
+<p>博客升级完成，本次我们进一步优化了对于手机和pad的支持，针对lollipop + chrome39以上浏览器进行了特别优化，为手机用户在本站的体验做出了提升，优化了文章中代码的显示，现在的显示更加漂亮，自然。</p>

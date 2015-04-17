@@ -1,0 +1,172 @@
+---
+layout: post
+status: publish
+published: true
+title: 关于操作系统中键盘按键的响应实现
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 97
+wordpress_url: http://www.bmysoft.org/?p=97
+date: !binary |-
+  MjAxNC0xMS0yMyAyMzo0OToxOCArMDgwMA==
+date_gmt: !binary |-
+  MjAxNC0xMS0yMyAxNTo0OToxOCArMDgwMA==
+categories:
+- C&#47;CPP
+- Kernel&#47;Devices
+- Asm
+- Kestrel
+tags: []
+comments: []
+---
+<p>这周和@whr 一起实现了Kestrel kernel的键盘响应，摒弃了原先使用的grub代码。 今天来总结一下代实现的关键</p>
+<pre>我们的核心汇编代码， 我来简单解读下<br />
+ENTRY(int21_handler)<br />
+ cli &nbsp; &nbsp; &nbsp;&#47;* 禁用中断 *&#47;<br />
+ pushw %es<br />
+ pushw %ds<br />
+ pushl %eax<br />
+ pushl %ecx<br />
+ pushl %edx<br />
+ pushl %ebx<br />
+ pushl %esp<br />
+ pushl %ebp<br />
+ pushl %esi<br />
+ pushl %edi &nbsp; &nbsp; &#47;* 入栈， 保存现场 *&#47;<br />
+movb $0x61, %al &nbsp; &nbsp; &nbsp; &nbsp;<br />
+ outb %al, $PIC0_OCW2 &nbsp; &nbsp; &nbsp; &nbsp;&#47;* 使用0x61去复位键盘中断 *&#47;<br />
+ xorl %eax, %eax &nbsp; &nbsp; &nbsp; &nbsp;&#47;* 对eax寄存器清零 *&#47;<br />
+ movw $0x0060, %dx &nbsp;&#47;* Port 0x60 是对PS&#47;2 进行 read&#47;write 的 Data Port *&#47;<br />
+ inb %dx, %al &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &#47;* 从Port 0x60取出keycode到ax *&#47;<br />
+ pushl %eax &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&#47;* 保护keycode *&#47;<br />
+ movw %ss, %ax<br />
+ movw %ax, %ds<br />
+ movw %ax, %es<br />
+ call input_buffer_put<br />
+ cli<br />
+ popl %eax<br />
+ popl %edi<br />
+ popl %esi<br />
+ popl %ebp<br />
+ popl %esp<br />
+ popl %ebx<br />
+ popl %edx<br />
+ popl %ecx<br />
+ popl %eax<br />
+ popw %ds<br />
+ popw %es<br />
+ sti &nbsp; &nbsp; &nbsp;&#47;* 开启cpu中断 *&#47;<br />
+ iret<&#47;pre></p>
+<h3>下面附上一些wiki.osdev.org的资料：<&#47;h3><br />
+&nbsp;</p>
+<p><span id="PS.2F2_Controller_IO_Ports" class="mw-headline">PS&#47;2 Controller IO Ports<&#47;span></p>
+<p>The PS&#47;2 Controller itself uses 2 IO ports (IO ports 0x60 and 0x64). Like many IO ports, reads and writes may access completely different internal registers.</p>
+<p>Historical note&nbsp;: The PC-XT PPI had used port 0x61 to reset the keyboard interrupt request signal (among other unrelated functions). Port 0x61 has no keyboard related functions on AT and PS&#47;2 compatibles.</p>
+<table border="2" cellspacing="0" cellpadding="4">
+<tbody>
+<tr>
+<th>IO Port<&#47;th></p>
+<th>Access Type<&#47;th></p>
+<th>Purpose<&#47;th><br />
+<&#47;tr></p>
+<tr>
+<td>0x60<&#47;td></p>
+<td>Read&#47;Write<&#47;td></p>
+<td>Data Port<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td>0x64<&#47;td></p>
+<td>Read<&#47;td></p>
+<td>Status Register<&#47;td><br />
+<&#47;tr></p>
+<tr>
+<td>0x64<&#47;td></p>
+<td>Write<&#47;td></p>
+<td>Command Register<&#47;td><br />
+<&#47;tr><br />
+<&#47;tbody><br />
+<&#47;table><br />
+关于通过keycode获取按键：</p>
+<p>wiki里给出了us键盘的keycode对应的按键，传送门：<a href="http:&#47;&#47;wiki.osdev.org&#47;PS2_Keyboard#Scan_Code_Set_1">http:&#47;&#47;wiki.osdev.org&#47;PS2_Keyboard#Scan_Code_Set_1<&#47;a></p>
+<pre>简单的实现方法</p>
+<p>&#47;*<br />
+ static char keymap[] = {<br />
+ -1, 0x1b, '1', '2', '3', '4', '5', '6', '7'<br />
+ }*&#47;<br />
+ &#47;* static char en_keymap1[] = " qwertyuiop[]\r";<br />
+ static char en_keymap2[] = "asdfghjkl;'";<br />
+ static char en_keymap3[] = "\\zxcvbnm,.&#47;";<br />
+ static char extra_number_keymap[] = "789-456+1230.";</p>
+<p> static char en_shift_keymap1[] = " QWERTYUIOP{}\r";<br />
+ static char en_shift_keymap2[] = "ASDFGHJKL:\"";<br />
+ static char en_shift_keymap3[] = "|ZXCVBNM<>?";</p>
+<p> enum {L_SHIFT_P=0x2a, R_SHIFT_P=0x36, L_SHIFT_R=0xAA, R_SHIFT_R=0xB6}; *&#47;</p>
+<p> switch(code) {<br />
+ case 0x1:<br />
+ return 0x1b;<br />
+ case 0x2 ... 0xa:<br />
+ return code + 0x2f;<br />
+ case 0xb:<br />
+ return 0x30;<br />
+ case 0xc:<br />
+ if(!shift_pressed){<br />
+ return '-';<br />
+ }else{<br />
+ return '_';<br />
+ }<br />
+ case 0xd:<br />
+ if(!shift_pressed){<br />
+ return '=';<br />
+ }else{<br />
+ return '+';<br />
+ }<br />
+ case 0xe:<br />
+ return 8;<br />
+ case 0xf ... 0x1c:<br />
+ if(!shift_pressed){<br />
+ return en_keymap1[code - 0xf];<br />
+ }else{<br />
+ return en_shift_keymap1[code - 0xf];<br />
+ }<br />
+ case 0x1d:<br />
+ return 0x1;<br />
+ case 0x1e ... 0x29:<br />
+ if(!shift_pressed){<br />
+ return en_keymap2[code - 0x1e];<br />
+ }else{<br />
+ return en_shift_keymap2[code - 0x1e];<br />
+ }<br />
+ case 0x2b ... 0x35:<br />
+ if(!shift_pressed){<br />
+ return en_keymap3[code - 0x2b];<br />
+ }else{<br />
+ return en_shift_keymap3[code - 0x2b];<br />
+ }<br />
+ case 0x37:<br />
+ return '*'; &#47;&#47; Extra<br />
+ case 0x39:<br />
+ return ' ';<br />
+ case 0x47 ... 0x53:<br />
+ return extra_number_keymap[code - 0x47];<br />
+ case L_SHIFT_P:<br />
+ case R_SHIFT_P:<br />
+ shift_checked = 0;<br />
+ shift_pressed = 1;<br />
+ &#47;* kernel_printf("shift pressed\n"); *&#47;<br />
+ return;</p>
+<p> &#47;* release *&#47;<br />
+ case L_SHIFT_R:<br />
+ case R_SHIFT_R:<br />
+ shift_checked = 0;<br />
+ shift_pressed = 0;<br />
+ &#47;* kernel_printf("shift releaseed\n"); *&#47;<br />
+ return;</p>
+<p> }<br />
+ return -2;<br />
+}<&#47;pre></p>

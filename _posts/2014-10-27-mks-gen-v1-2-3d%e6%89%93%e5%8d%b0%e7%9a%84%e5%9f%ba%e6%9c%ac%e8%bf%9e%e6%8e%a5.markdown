@@ -1,0 +1,77 @@
+---
+layout: post
+status: publish
+published: true
+title: MKS Gen V1.2 3D打印的基本连接
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 75
+wordpress_url: http://www.bmysoft.org/?p=75
+date: !binary |-
+  MjAxNC0xMC0yNyAyMDoyMToxNyArMDgwMA==
+date_gmt: !binary |-
+  MjAxNC0xMC0yNyAxMjoyMToxNyArMDgwMA==
+categories:
+- Adruino
+- 3D打印
+tags: []
+comments:
+- id: 21
+  author: Willy
+  author_email: willy.w650@gmail.com
+  author_url: ''
+  date: !binary |-
+    MjAxNS0wMS0xMSAxMjoyMjo0NCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxNS0wMS0xMSAwNDoyMjo0NCArMDgwMA==
+  content: ! "你好！看到你也是MKS GEN v1.2用户，小弟遇上一些设定问题想你请教啊～\r\n\r\n我淘了两块分块LCD2004与12864Full
+    Graphic LCD controller，但根据网上简单uncomment 有关的define statement后，接驳后两块也出现相同现象&ldquo;画面无发光丶无任何显示丶buzzer不断间断的叫丶"
+- id: 35
+  author: JohnnySun
+  author_email: bmy001@gmail.com
+  author_url: ''
+  date: !binary |-
+    MjAxNS0wMS0xOSAxMjoyMTo0NCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxNS0wMS0xOSAwNDoyMTo0NCArMDgwMA==
+  content: 抱歉才看到你的评论，这两天一直在忙考试。你是不是吧排线接反了。正常只要加入一个ug8lib和去除define后就是可以用的
+- id: 36
+  author: JohnnySun
+  author_email: bmy001@gmail.com
+  author_url: ''
+  date: !binary |-
+    MjAxNS0wMS0xOSAxMjoyODoxOCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxNS0wMS0xOSAwNDoyODoxOCArMDgwMA==
+  content: 画面无发光的话应该是lde的电力引脚没有被正确接入，或者我建议你看看你的marlin里pins.h里面的各个针脚定义的是否有问题。
+---
+<p>我们使用的Mega 2560的定制板MKS Gen V1.2进行的基本配置，5个A4988步进电机驱动已经安装在板子上，其余部件没有安装，仅进行了基本的软件连通性测试。下面介绍下在 Linux 下的软件连通方法。</p>
+<p>主机上需要安装printrun-gui,官方wiki给出了如下的方法（Debian）：</p>
+<blockquote>
+<h4><span id="Debian" class="mw-headline">Debian<&#47;span><&#47;h4><br />
+You can run Printrun directly from source, as there are no (official) packages available yet. Fetch and install the dependencies using:</p>
+<pre>sudo apt-get install python-serial python-wxgtk2.8 python-pyglet<br />
+<&#47;pre><br />
+There are experimental packages for Debian (squeeze wheezy):</p>
+<pre>sudo echo "deb <a class="external free" href="http:&#47;&#47;apt.ulrichard.ch&#47;" rel="nofollow">http:&#47;&#47;apt.ulrichard.ch&#47;<&#47;a>  squeeze main contrib non-free" >> &#47;etc&#47;apt&#47;sources.list<br />
+sudo apt-get update<br />
+sudo apt-get install printrun-gui<br />
+<&#47;pre><br />
+<&#47;blockquote><br />
+由于我使用的是Debian Sid 9,官方只给出了debian6 的源（不吐槽，这个源还是404的。。。。。。。无法使用）</p>
+<p>我的安装方法如下：</p>
+<ol>
+<li>sudo apt-get install python-serial python-wxgtk2.8 python-pyglet python-tornado python-setuptools python-libxml2 python-gobject avahi-daemon libavahi-compat-libdnssd1 python-dbus python-psutil git<&#47;li>
+<li>git clone https:&#47;&#47;github.com&#47;kliment&#47;Printrun.git<&#47;li>
+<li>sudo&nbsp;.&#47;pronterface.py<&#47;li><br />
+<&#47;ol><br />
+然后期待已久的画面终于出来了！ 赶紧给板子通电~~波特率选择为250000 Connect</p>
+<p>[caption id="attachment_76" align="alignnone" width="1366"]<a href="http:&#47;&#47;www.bmysoft.org&#47;wp-content&#47;uploads&#47;2014&#47;10&#47;2014-10-27-200000-的屏幕截图.png"><img class="size-full wp-image-76" src="http:&#47;&#47;www.bmysoft.org&#47;wp-content&#47;uploads&#47;2014&#47;10&#47;2014-10-27-200000-的屏幕截图.png" alt=".&#47;pronterface.py" width="1366" height="768" &#47;><&#47;a> .&#47;pronterface.py[&#47;caption]</p>
+<p>由于我们没有接入步进电机和温度模块，只能通过右侧基本的数据进行观察，由于没有接入温度模块，温度曲线一直是平的，如下图</p>
+<p>[caption id="attachment_77" align="alignnone" width="1366"]<a href="http:&#47;&#47;www.bmysoft.org&#47;wp-content&#47;uploads&#47;2014&#47;10&#47;2014-10-27-200013-的屏幕截图.png"><img class="size-full wp-image-77" src="http:&#47;&#47;www.bmysoft.org&#47;wp-content&#47;uploads&#47;2014&#47;10&#47;2014-10-27-200013-的屏幕截图.png" alt=".&#47;pronterface.py 温度曲线" width="1366" height="768" &#47;><&#47;a> .&#47;pronterface.py 温度曲线[&#47;caption]</p>

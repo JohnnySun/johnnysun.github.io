@@ -1,0 +1,24 @@
+---
+layout: nav_menu_item
+status: publish
+published: true
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+excerpt: Kestrel Kernel
+wordpress_id: 115
+wordpress_url: http://www.bmysoft.org/?p=115
+date: !binary |-
+  MjAxNC0xMS0yNSAwMDozOToxOCArMDgwMA==
+date_gmt: !binary |-
+  MjAxNC0xMS0yNCAxNjozOToxOCArMDgwMA==
+categories: []
+tags: []
+comments: []
+---
+

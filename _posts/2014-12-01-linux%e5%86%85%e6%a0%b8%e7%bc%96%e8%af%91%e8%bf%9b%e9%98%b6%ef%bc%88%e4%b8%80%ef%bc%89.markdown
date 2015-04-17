@@ -1,0 +1,41 @@
+---
+layout: post
+status: publish
+published: true
+title: Linux内核编译进阶（一）
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 119
+wordpress_url: http://www.bmysoft.org/?p=119
+date: !binary |-
+  MjAxNC0xMi0wMSAyMDo1MDoyNSArMDgwMA==
+date_gmt: !binary |-
+  MjAxNC0xMi0wMSAxMjo1MDoyNSArMDgwMA==
+categories:
+- Linux
+- Kernel&#47;Devices
+tags: []
+comments: []
+---
+<ol>
+<li>首先是下载源代码,可以从<a href="https:&#47;&#47;www.kernel.org&#47;">The Linux Kernel Archives<&#47;a>下载最新版本的内核<&#47;li>
+<li>下载将会得到linux-X.XX.X.tar.xz的文件，将其解压缩。<&#47;li>
+<li>完全解压后将会得到linux-X.XX.X这样的文件夹，使用Terminal cd到此目录下。<&#47;li>
+<li>下面我们就可以开始编译内核了，首先&nbsp;＃make mrproper （执行此步的作用是确保源代码目录下没有不正确的.0 或者文件依赖，建议每次编译前执行。<&#47;li>
+<li>接下来的内核配置过程比较烦琐，但是配置的适当与否与日后linux的运行直接相关，<br />
+有必要了解一下一些主要的且经常用到的选项的设置。<br />
+配置内核可以根据需要与爱好使用下面命令中的一个：#make config（基于文本的最为传统的配置界面，不推荐使用）</p>
+<pre>#make menuconfig（基于文本选单的配置界面，字符终端下推荐使用）<br />
+#make xconfig（基于图形窗口模式的配置界面，Xwindow下推荐<br />
+#make oldconfig（如果只想在原来内核配置的基础上修改一些小地方，会省去不少麻烦.<&#47;pre><br />
+这里推荐大家使用make menuconfig，通过此步骤，可以进行一些内核的定制，包括一些模块的删减，定制一些模块为内核的挂在模块等等。<&#47;li></p>
+<li>下面就是编译了，编译我们使用make -j8 &nbsp;这里的数字设置为本机cpu支持的并发线程的1-2倍效率最高，比如我的i5,所以我设置成了j8. &nbsp;-jxx意味着同时进行编译的Job数量。<&#47;li>
+<li>安装内核模块： 使用make modules_install -j8<&#47;li>
+<li>安装内核: make install 执行此命令和会把广告编译好的内核安装到现在的计算机上。<&#47;li><br />
+<&#47;ol></p>

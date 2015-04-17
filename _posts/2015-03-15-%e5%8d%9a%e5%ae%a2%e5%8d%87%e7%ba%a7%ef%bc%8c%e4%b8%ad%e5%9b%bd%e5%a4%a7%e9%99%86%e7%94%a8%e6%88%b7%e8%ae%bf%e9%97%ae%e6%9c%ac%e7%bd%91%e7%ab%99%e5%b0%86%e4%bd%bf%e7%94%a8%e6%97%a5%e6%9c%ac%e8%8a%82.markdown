@@ -1,0 +1,26 @@
+---
+layout: post
+status: publish
+published: true
+title: 博客升级，中国大陆用户访问本网站将使用日本节点
+author:
+  display_name: JohnnySun
+  login: JohnnySun
+  email: bmy001@gmail.com
+  url: http://libdll.so
+author_login: JohnnySun
+author_email: bmy001@gmail.com
+author_url: http://libdll.so
+wordpress_id: 188
+wordpress_url: http://libdll.so/?p=188
+date: !binary |-
+  MjAxNS0wMy0xNSAwMDo1NDoyNSArMDgwMA==
+date_gmt: !binary |-
+  MjAxNS0wMy0xNCAxNjo1NDoyNSArMDgwMA==
+categories:
+- 未分类
+tags: []
+comments: []
+---
+<p>网站刚刚进行了升级，现在，处于中国大陆的用户访问本网站将会被指向我们部署在日本东京的服务器。若您的当前网络环境访问日本节点较慢，可以使用us.libdll.so访问美国节点，同理，也可以使用tokyo.libdll.so进行日本节点的访问。<br />
+特此公告，祝大家使用愉快。</p>

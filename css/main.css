@@ -53,10 +53,7 @@ nav {
 }
 
 .scrollToTop {
-    position: fixed;
-    top: 100px;
-    right: 40px;
-    display: none;
+    display: inline-block;
 }
 
 .preloader {
@@ -306,6 +303,4 @@ nav {
     }
 }
 
-.scrollToTop i {
-    font-size: 50px;
-}
+

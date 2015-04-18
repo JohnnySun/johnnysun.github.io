@@ -40,6 +40,6 @@ paginate_path: /page:num/
 
 # Build settings
 markdown: kramdown
-highlighter: null #pygments
+highlighter: true #pygments
 lsi: false
 safe: false

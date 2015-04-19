@@ -2,7 +2,7 @@
 layout: post
 title:  "新博客手机效果展示"
 date:   2015-4-20 01:14:00
-cover: "/img/material.jpg"
+cover: "https://lh3.googleusercontent.com/vXihfnrkHKHtt8hNdiWyBTABQOjvAov6HgCkkjCFQDQ=s0"
 categories: other
 ---
 ####使用Android5.1 + Chrome效果图

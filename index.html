@@ -42,10 +42,10 @@ layout: default
                     <div class="card-content white-text">
                         <div class="card-title">{{ post.title }}</div>
                         <p>{{ post.date | date: "%b %-d, %Y" }}</p><br/>
-                        {{ post.content | strip_html | truncatewords: 50}}
+                        {{ post.content | strip_html | truncatewords: 20}}
                     </div>
                     <div class="card-action {{ site.css }} darken-2">
-                        <button href="{{ post.url | prepend: site.baseurl }}" class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-light btn">View Post</button>
+                        <button href="{{ post.url | prepend: site.url }}" class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-light btn">View Post</button>
                         <button class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-light btn" href='#'>Bookmark!</button>
                     </div>
                 </div>

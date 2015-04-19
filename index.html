@@ -45,8 +45,8 @@ layout: default
                         {{ post.content | strip_html | truncatewords: 20}}
                     </div>
                     <div class="card-action {{ site.css }} darken-2">
-                        <button href="{{ post.url | prepend: site.url }}" class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-light btn">View Post</button>
-                        <button class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-light btn" href='#'>Bookmark!</button>
+                        <a href="{{ post.url | prepend: site.baseurl }}" class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-light btn">View Post</a>
+                        <a class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-light btn" href='#'>Bookmark!</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -55,21 +55,21 @@ layout: default
                 <div class="card-action {{ site.css }} darken-2">
                     <span class="pagin-btns">
                         {% if paginator.previous_page %}
-                        <button class="{{ site.css }} disabled darken-1 white-text text-darken-3 waves-effect waves-light btn" href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">Prev</button>
+                        <button class="{{ site.css }} disabled darken-1 white-text text-darken-3 waves-effect waves-light btn" href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">Prev</a>
                         {% endif %}
 
                         {% for page in (1..paginator.total_pages) %}
                         {% if page == paginator.page %}
-                        <button disabled="disabled" class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-light btn" href='#'>{{ page }}</button>
+                        <a disabled="disabled" class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-light btn" href='#'>{{ page }}</a>
                         {% elsif page == 1 %}
-                        <button class="{{ site.css }} disabled lighten-1 white-text text-darken-3 waves-effect waves-light btn" href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</button>
+                        <a class="{{ site.css }} disabled lighten-1 white-text text-darken-3 waves-effect waves-light btn" href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</a>
                         {% else %}
-                        <button class="{{ site.css }} disabled lighten-1 white-text text-darken-3 waves-effect waves-light btn" href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</button>
+                        <a class="{{ site.css }} disabled lighten-1 white-text text-darken-3 waves-effect waves-light btn" href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
                         {% endif %}
                         {% endfor %}
 
                         {% if paginator.next_page %}
-                        <button class="{{ site.css }} disabled darken-1 white-text text-darken-3 waves-effect waves-light btn" href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Next</button>
+                        <a class="{{ site.css }} disabled darken-1 white-text text-darken-3 waves-effect waves-light btn" href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Next</a>
                         {% endif %}
                     </span>
                 </div>

@@ -28,6 +28,9 @@ body {
     text-align: justify;
 }
 
+#page-wrap {
+    height: initial !important;
+}
 .clamp-module {
     height: 120px;
     overflow: hidden;

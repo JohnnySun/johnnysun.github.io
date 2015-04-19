@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "新博客手机效果展示"
+date:   2015-4-20 01:14:00
+cover: "/img/material.jpg"
+categories: other
+---
+####使用Android5.1 + Chrome效果图
+![enter image description here](https://lh3.googleusercontent.com/vXihfnrkHKHtt8hNdiWyBTABQOjvAov6HgCkkjCFQDQ=s0 "Screenshot_2015-04-18-23-05-37.png")
+
+![enter image description here](https://lh3.googleusercontent.com/PMqUUTLQlABW4f4n1nI50h96Ps06SPFJJyQd6iPiP9Q=s0 "Screenshot_2015-04-18-23-05-44.png")
+
+![enter image description here](https://lh3.googleusercontent.com/5O7OLcD416hb1z3Fp414HwfvGCN08fcCW57rG-omcnk=s0 "Screenshot_2015-04-18-23-05-48.png")
+
+![enter image description here](https://lh3.googleusercontent.com/GoKbZXMuHdbJSIj0SobtPUpbfrIfQz6xBliYbM60tEg=s0 "Screenshot_2015-04-18-23-27-59.png")

@@ -1,0 +1,31 @@
+#ds-thread #ds-reset .ds-post-button1 {
+  /* font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; */
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 32px;
+  width: 100px;
+}
+
+#ds-thread #ds-reset a.ds-like-thread-button {
+  border: none !important;
+  background-color: rgb(224, 247, 250) !important;
+  background-image: none !important;
+}
+
+#ds-thread #ds-reset a.ds-thread-liked {
+  background-color: rgb(224, 247, 250) !important;
+}
+
+#ds-reset .ds-gradient-bg {
+  background: none !important;
+}
+
+#ds-thread #ds-reset .ds-post-options {
+  border: 1px solid #00ACC1 !important;
+  border-bottom-color: #00ACC1 !important;
+}
+
+#ds-reset .ds-powered-by {
+  display: none;
+}

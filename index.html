@@ -5,7 +5,7 @@ layout: default
  
     <div id="skrollr-body">
         <div id="non-skrollr">
-
+        
             {% if paginator.page == 1 %}
             <div class="container-fluid">
                 <div class="mast">
@@ -19,15 +19,7 @@ layout: default
                 </div>
             </div>
 
-
-
-            
-
-
             {% endif %}
-
-
-
 
             {% for post in paginator.posts %}
             <div class="" style="margin-top:20px;">
@@ -74,8 +66,6 @@ layout: default
                     </span>
                 </div>
                 {% endif %}
-
-
             </div>
 
             {% if paginator.page == 1 %}

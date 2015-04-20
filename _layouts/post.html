@@ -13,17 +13,29 @@
         {{ content }}
     </article>
     <br/><hr/><br/>
-    <button class="{{ site.css }} darken-1 white-text text-darken-3 waves-effect waves-cyan waves-light btn" href="/">Share</button>
-    <button class="{{ site.css }} darken-2 white-text text-darken-3 waves-effect waves-cyan waves-light btn" href="/blog/">Back Home</button>
+    <button class="{{ site.css }} darken-2 white-text text-darken-3 waves-effect waves-cyan waves-light btn" href="/">Back Home</button>
     <br/>&nbsp;
     <br>
+
     <h3>Leave a comment</h3><br>
+    <!-- 多说评论框 start -->
+    <div class="ds-thread waves-cyan waves-light" data-thread-key="{{page.id}}" data-title="{{ page.title }}" data-url="{{ site.url }}{{page.url}}"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"libdll"};
+        (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = '/js/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
 
-
-
-
-
-
+      <!--
       <div class="row">
     <div class="col s8">
       <ul class="tabs {{site.css}} z-depth-1">
@@ -64,8 +76,8 @@
           </div>
   </div>
     <br><br><br>
-
+-->
     
-
+<br><br><br>
 </div>
 </div>

@@ -20,7 +20,13 @@
 #ds-reset .ds-gradient-bg {
   background: none !important;
 }
-
+#ds-thread #ds-reset .ds-post-button {
+  background-color: #0097A7 !important;
+  background-image: none !important;
+  color: #FFF !important;
+  text-shadow: 0 0px 0 #fff !important;
+  border: 0px !important;
+}
 #ds-thread #ds-reset .ds-post-options {
   border: 1px solid #00ACC1 !important;
   border-bottom-color: #00ACC1 !important;

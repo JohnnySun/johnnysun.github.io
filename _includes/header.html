@@ -4,25 +4,33 @@
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-58696852-1', 'auto');
-  ga('send', 'pageview');
+ga('create', 'UA-58696852-1', 'auto');
+ga('send', 'pageview');
 
 </script>
 <header class="site-header">
     <div class="navbar-fixed">
         <nav class="{{ site.css }} darken-2">
             <div class="nav-wrapper">
-               <div class="container">
-                <a href="{{ site.baseurl }}/" class="brand-logo">{{site.title}}</a>
-                <ul id="nav-mobile" class="right side-nav">
-                    <li><a internal href="{{ site.baseurl }}/">Blog</a>
-                    </li>
-                    <li><a internal href="{{ site.baseurl }}/about/">About</a>
-                    </li>
-                    <li><a href="http://github.com/johnnysun/" target="_blank">GitHub</a>
-                    </li>
+                <div class="container">
+                    <a href="{{ site.baseurl }}/" class="brand-logo">{{site.title}}</a>
+                    <a href="#" data-activates="mobile-demo" class="button-collapse" style="left: 20px; position: fixed;"><i class="mdi-navigation-menu"></i>i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a internal href="{{ site.baseurl }}/">Blog</a>
+                        </li>
+                        <li><a internal href="{{ site.baseurl }}/about/">About</a>
+                        </li>
+                        <li><a href="http://github.com/johnnysun/" target="_blank">GitHub</a>
+                        </li>
+                    </ul>
+                    <ul id="mobile-demo" class="right side-nav">
+                        <li><a internal href="{{ site.baseurl }}/">Blog</a>
+                        </li>
+                        <li><a internal href="{{ site.baseurl }}/about/">About</a>
+                        </li>
+                        <li><a href="http://github.com/johnnysun/" target="_blank">GitHub</a>
+                        </li>
                 </ul>
-                <a class="button-collapse show-on-large" href="#" data-activates="nav-mobile" style="left: 20px; position: fixed;"><i class="mdi-navigation-menu"></i></a>
             </div>
             </div>
         </nav>

@@ -3,7 +3,6 @@ layout: post
 title: "Activity Lifecycle"
 categories: Android
 ---
-![enter image description here](https://i.imgur.com/3HpooIP.png)
 
 *Activities in the system are managed as an activity stack. When a new activity is started, it is placed on the top of the stack and becomes the running activity -- the previous activity always remains below it in the stack, and will not come to the foreground again until the new activity exits.*
 

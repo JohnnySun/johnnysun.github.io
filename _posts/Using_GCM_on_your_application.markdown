@@ -1,0 +1,55 @@
+---
+layout: post
+title: "Using GCM on your application"
+categories: Android
+cover:
+---
+做一些总结，今天大致看了下GCM的使用方法，现在来稍微总结一下，作为一个温习。
+
+## **GcmListenerService**
+---
+*GCM Receiver*
+
+要想使用GCM，首先要
+`import com.google.android.gms.gcm.GcmListenerService`
+
+之后从GcmListenerService继承一个新的类
+
+    public class MyGcmListenerService extends GcmListenerService {
+    ...
+    }
+    
+  类中重载onMessageReceived
+  函数原型
+  
+
+    public void onMessageReceived(String from, Bundle data) {
+    }
+重载成如下
+
+    @Override
+    public void onMessageReceived(String from, Bundle data) {
+        String message = data.getString("message");
+        Log.d(TAG, "From: " + from);
+        Log.d(TAG, "Message: " + message);
+
+___
+*Gcm Sender*
+
+从服务端发送消息到GCM服务器
+使用http协议的方法如下
+
+    Content-Type:application/json
+    Authorization:key=AIzaSyZ-1u...0GBYzPu7Udno5aA
+    {
+      "to";/topics/foo-bar
+      "data": {
+      "message":"This is GCM Topic Message",
+      }
+     }
+      
+
+  
+
+
+

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "How to use GCM"
+categories: Android
 ---
 做一些总结，今天大致看了下GCM的使用方法，现在来稍微总结一下，作为一个温习。
 

@@ -28,7 +28,7 @@ email: bmy001@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   Hello, I'm JohnnySun, a Linux programmer developer. Check out my projects on GitHub
 baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://libdll.so" # the base hostname & protocol for your site
+url: "http://material.libdll.so" # the base hostname & protocol for your site
 twitter_username: bmy001
 github_username:  Johnnysun
 css: "cyan"

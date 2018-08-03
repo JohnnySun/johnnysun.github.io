@@ -8,7 +8,7 @@ categories: Android
 
 关于各大厂商Andord8.X的刘海适配这里不再多说，参考个大厂商文档即可
 
-这里说下AndroidP适配和之前给8.x刘海适配的不同之处：
+主要还是说下AndroidP适配和之前给8.x刘海适配的不同之处：
 * 在8.x时 各大厂商判断刘海基本都是用的getSysprop 或者是反射，在获取刘海的时候不需要获取Window，但是在AndroidP中， 用户想获取刘海的信息，需要使用`getRootWindowInsets().getDisplayCutout()` 这就需要获取window
 下面给出在AndoridP中判断设备是否是刘海屏的方法
 ```java

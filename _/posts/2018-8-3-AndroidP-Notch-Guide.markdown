@@ -51,4 +51,4 @@ lp.layoutInDisplayCutoutMode =
 act.getWindow().setAttributes(lp);
 ```
 
-当然 如果你在启动页设置了默认背景，并且设置了Fullscreen，那么
+当然 如果你在启动页设置了默认背景，并且设置了Fullscreen，那么在启动的时候刘海会是一个大黑条，很难看，解决的方法是在StartAct的theme中加入`<item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>`

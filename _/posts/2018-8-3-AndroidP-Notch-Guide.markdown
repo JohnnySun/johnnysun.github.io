@@ -15,4 +15,40 @@ categories: Android
 DisplayCutout cutout = attachedView.getRootWindowInsets().getDisplayCutout();
 return cutout != null;
 ```
-需要注意的是，
+需要注意的是，这里的attachedView不能在onCreate的时候随便传一个view，那时候view还没有Attach到window，拿到的RootWindowInsets是null，这里推荐使用OnApplyWindowInsetesListener方法，在应用Insetes时判断刘海状态并保存，示例如下
+```java
+if (StatusBarUtils.isAndroidM()) {
+    getWindow().getDecorView().setOnApplyWindowInsetsListener( new View.OnApplyWindowInsetsListener() {
+        @SuppressLint("NewApi")
+        @Override
+        public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+            //用这里的View判断刘海状态
+            LoginCommon.HAS_NOTCH = DeviceUtils.hasNotch(v) ? DeviceUtils.HAS_NOTCH : DeviceUtils.NO_NOTCH;
+            getWindow().getDecorView().setOnApplyWindowInsetsListener(null);
+            return v.onApplyWindowInsets(insets);
+        }
+    });
+}
+```
+
+* AndroidP 的默认逻辑是LayoutFullScrren的WindowFlag可以侵入刘海，默认的状态和FullScrren的情况下，系统会禁止DecorView侵入刘海，但是有些时候我们有需要让FullScreen的情况下侵入刘海区域，这时候就需要设置`WindowManager.LayoutParams`的`layoutInDisplayCutoutMode`
+```java 
+// AndoridP 中定义了三种类型
+
+// DEFAULT就是上面说的默认 LayoutFullScrren可以侵入，其余不会侵入刘海区域
+public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT = 0;
+// 这个状态是永远不会在刘海上绘制
+public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER = 2;
+//使用这个状态可以让LayoutFullScreen和FullScrren的时候在刘海区域绘制
+public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES = 1;
+```
+
+这里给出一个修改绘制区域的例子 
+```java
+WindowManager.LayoutParams lp = act.getWindow().getAttributes();
+lp.layoutInDisplayCutoutMode =
+                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+act.getWindow().setAttributes(lp);
+```
+
+当然 如果你在启动页设置了默认背景，并且设置了Fullscreen，那么

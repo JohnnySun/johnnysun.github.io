@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Activity Lifecycle"
+title: "2015-10-16-Activity Lifecycle"
 categories: Android
 ---
 

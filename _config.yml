@@ -11,6 +11,7 @@ title:            JohnnySun
 tagline:          'Blog'
 description:      'Android Developer @Mafengwo Inc.'
 url:              http://johnnysun.github.io
+baseurl:          /
 
 
 author:

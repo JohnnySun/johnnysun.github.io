@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "2018-8-3-AndroidP刘海适配指南"
+title: "AndroidP刘海适配指南"
 categories: Android
 ---
 

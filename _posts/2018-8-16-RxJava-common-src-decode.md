@@ -8,7 +8,7 @@ date: 2018-8-16
 ---
 
 <p><em>本文对rxjava最常用的方法进行一部分源码解读，便于大家理解rxjava的工作原理</em></p>
-<!--more-->
+<!-- more -->
 <p>Rxjava create 调用流程</p>
 <p><img src="https://i.imgur.com/6kp4Rzt.png" alt="Imgur"></p>
 <p><strong>这里来看Rxjva如何来做线程切换，以及observeOn和subscribeOn的区别</strong></p>

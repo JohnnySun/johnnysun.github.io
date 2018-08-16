@@ -1,7 +1,7 @@
 ---
 title: 源码解读Rxjava实现的基本方法
 author: JohnnySun
-tags: 'RxJava,Android,Thread'
+tags: 'RxJava, Android, Thread'
 categories: Android
 date: 2018-8-16
 

@@ -9,7 +9,7 @@ description: "Android Developer @Mafengwo Inc." # used by search engines
 theme_settings:
   # Meta
   title: JohnnySun - Blog # blog's title
-  avatar: assets/img/triangle.svg
+  avatar: assets/img/avatar.jpg
   favicon: assets/favicon.ico
   gravatar: # Email MD5 hash
 

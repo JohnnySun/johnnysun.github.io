@@ -32,7 +32,7 @@ if (StatusBarUtils.isAndroidM()) {
 }
 ```
 
-* AndroidP 的默认逻辑是LayoutFullScrren的WindowFlag可以侵入刘海，默认的状态和FullScrren的情况下，系统会禁止DecorView侵入刘海，但是有些时候我们有需要让FullScreen的情况下侵入刘海区域，这时候就需要设置`WindowManager.LayoutParams`的`layoutInDisplayCutoutMode`
+* AndroidP 的默认逻辑是LayoutFullScrren的WindowFlag可以侵入刘海，默认的状态和FullScrren的情况下，系统会禁止DecorView侵入刘海，但是有些时候我们有需要让FullScreen的情况下侵入刘海区域，这时候就需要设置`WindowManager.LayoutParams`的`layoutInDisplayCutoutMode`。
 
 ```java 
 // AndoridP 中定义了三种类型
@@ -45,7 +45,7 @@ public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER = 2;
 public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES = 1;
 ```
 
-这里给出一个修改绘制区域的例子 
+这里给出一个修改绘制区域的例子： 
 
 ```java
 WindowManager.LayoutParams lp = act.getWindow().getAttributes();

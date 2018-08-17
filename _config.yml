@@ -40,7 +40,7 @@ theme_settings:
   stack_exchange:  # Full URL
   steam:
   tumblr:
-  twitter: # "twitter username"
+  twitter: "bmy001" # "twitter username"
   vimeo:
   wordpress:
   youtube:
@@ -52,7 +52,7 @@ theme_settings:
     google_plus: true
     tumblr:
     pinterest:
-    pocket:
+    pocket: true
     reddit: true
     linkedin:
     wordpress:

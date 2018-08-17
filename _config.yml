@@ -2,7 +2,7 @@
 baseurl: "/"
 url: "https://johnnysun.github.io"
 title: JohnnySun - Blog # site's title
-description: "Android Developer @Mafengwo Inc." # used by search engines
+description: "Android Developer @Mafengwo" # used by search engines
 
 
 # THEME-SPECIFIC CONFIGURATION
@@ -59,7 +59,7 @@ theme_settings:
     email: true
 
   # Scripts / Features 
-  google_analytics: # Tracking ID, e.g. "UA-000000-01"
+  google_analytics: "UA-58696852-2" # Tracking ID, e.g. "UA-000000-01"
   disqus_shortname:
   katex: true # Enable if using math markup
   

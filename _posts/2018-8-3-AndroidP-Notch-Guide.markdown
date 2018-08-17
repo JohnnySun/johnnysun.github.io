@@ -44,6 +44,7 @@ public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES = 1;
 ```
 
 这里给出一个修改绘制区域的例子 
+
 ```java
 WindowManager.LayoutParams lp = act.getWindow().getAttributes();
 lp.layoutInDisplayCutoutMode =

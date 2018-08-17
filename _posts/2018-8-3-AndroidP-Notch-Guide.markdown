@@ -16,6 +16,7 @@ DisplayCutout cutout = attachedView.getRootWindowInsets().getDisplayCutout();
 return cutout != null;
 ```
 需要注意的是，这里的attachedView不能在onCreate的时候随便传一个view，那时候view还没有Attach到window，拿到的RootWindowInsets是null，这里推荐使用OnApplyWindowInsetesListener方法，在应用Insetes时判断刘海状态并保存，示例如下
+
 ```java
 if (StatusBarUtils.isAndroidM()) {
     getWindow().getDecorView().setOnApplyWindowInsetsListener( new View.OnApplyWindowInsetsListener() {
@@ -32,6 +33,7 @@ if (StatusBarUtils.isAndroidM()) {
 ```
 
 * AndroidP 的默认逻辑是LayoutFullScrren的WindowFlag可以侵入刘海，默认的状态和FullScrren的情况下，系统会禁止DecorView侵入刘海，但是有些时候我们有需要让FullScreen的情况下侵入刘海区域，这时候就需要设置`WindowManager.LayoutParams`的`layoutInDisplayCutoutMode`
+
 ```java 
 // AndoridP 中定义了三种类型
 

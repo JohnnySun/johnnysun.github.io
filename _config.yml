@@ -16,7 +16,7 @@ theme_settings:
   # Header and footer text
   header_text: > #two or three lines to describe your site
      <p>世界に一つだけの花</p>
-  header_text_feature_image: assets/img/pexels/triangular.jpeg
+  header_text_feature_image: assets/img/pexels/sekai-ni-hitotsu-dake-no-hana.jpg
   footer_text: >
    No.1 にならなくてもいい　もともと特別な Only One <br>Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
 

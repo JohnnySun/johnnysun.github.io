@@ -25,6 +25,7 @@ date: '2018-11-18'
 我们这样写一个最简单的XML，那么他的表现是什么样呢？
 
 如果最外层不是FrameLayout，而是RelativeLayout, 也就是我们的理想效果，那他应该是这样
+
 ![Imgur](https://i.imgur.com/X8wfc8e.png)
 
 而实际上的效果呢？

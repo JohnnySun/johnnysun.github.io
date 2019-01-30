@@ -1,5 +1,5 @@
 ---
-title: 一个不需要将View添加到ViewTree的View截图框架
+title: 一个不需要将View添加到Display的View欺骗截图框架
 author: JohnnySun
 tags: Android
 categories: Android
@@ -55,9 +55,12 @@ class ViewCaptureLayout: RelativeLayout {
     private var measureWidthMode = View.MeasureSpec.UNSPECIFIED
     private var imageIndex = ArrayList<ImageStatus>()
 
+    private var viewHolder = RelativeLayout(context)
+
     private var needAsyncShot = false
     private var imageLoadCompleted = false
     private var hasFoundWebImageView = false
+    private var isPrepared = false
 
     private var onShotCallback : ((Bitmap) -> Unit)? = null
 
@@ -97,17 +100,35 @@ class ViewCaptureLayout: RelativeLayout {
         }
     }
 
+
+    override fun removeAllViews() {
+        super.removeAllViews()
+        viewHolder.removeAllViews()
+        imageIndex.clear()
+    }
+
+    /**
+     * 这里先不去真正的addView，而是添加到以一个ViewHolder中，等待所有的add完成后zaiprepare时统一add
+     */
+    override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
+        viewHolder.addView(child, index, params)
+    }
+
     /**
      * 这里没有使用addView， 使用了轻量的attachViewToParent方法，目前看来带来的副作用也是有的，
      * 某些复杂的布局可能会不生效，这里推荐在再裹一层ViewGroup的方式，直接放复杂布局包裹在内部就好。
      * 这里之所以不用addView是因为这个ShotLayout并不需要添加到ViewTree，所以需要骗过系统，这里是
      * 用了dispatchVisibilityAggregated这个方法来通知系统 我的View和Drawable都是可见的。
      */
-    override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
-        //super.addView(child, index, params)
-        //requestLayout()
-        //invalidate()
-        attachViewToParent(child, index, params)
+    private fun attachViewHolder() {
+        imageIndex.clear()
+        super.removeAllViews()
+        insertImageListener(viewHolder)
+        var params = viewHolder.layoutParams
+        params.whenNull {
+            params = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
+        attachViewToParent(viewHolder, 0, params)
         requestLayout()
         invalidate()
     }
@@ -141,7 +162,7 @@ class ViewCaptureLayout: RelativeLayout {
                         }
                     })
                 }
-            } else if (child is ViewGroup) {
+            } else if (child is ViewGroup && child.visibility == View.VISIBLE) {
                 insertImageListener(child)
             }
         }
@@ -169,20 +190,45 @@ class ViewCaptureLayout: RelativeLayout {
     /**
      * 在初始化完成后调用该方法
      */
-    fun onPrepare() {
+    fun onPrepare(prepareCompleteCallback: (() -> Unit)) {
+        if (Looper.getMainLooper().thread == Thread.currentThread()) {
+            onPrepareThreadUnSafe()
+            prepareCompleteCallback.invoke()
+        } else {
+            Observable.just(null).observeOn(AndroidSchedulers.mainThread())
+                    .map { onPrepareThreadUnSafe() }
+                    .subscribe { prepareCompleteCallback.invoke() }
+        }
+
+    }
+
+    // 不要再UI线程之外调用，如有异步需求，请使用onPrepre
+    @Suppress("MemberVisibilityCanBePrivate")
+    @UiThread
+    fun onPrepareThreadUnSafe(forcePrepare: Boolean = false) {
+        if (isPrepared && !forcePrepare) {
+            // 这里默认不会prepare两次，连续prepare两次可能会造成recycler的逻辑出现问题。如有需要，请使用forcePrepare
+            return
+        }
+        isPrepared = true
         imageLoadCompleted = false
-        insertImageListener(this)
+        attachViewHolder()
         if (!hasFoundWebImageView) {
             imageLoadCompleted = true
         }
         measure(View.MeasureSpec.makeMeasureSpec(viewWidth, measureWidthMode),
                 View.MeasureSpec.makeMeasureSpec(viewHeight, measureHeightMode))
+        // 这里这么做是为了解决在某些嵌套RecyclerView的时候，如果没有layout之后没有完全重新添加一次的话，vh会被重新create。
+        // 这样的话 截图就不会正常显示了
         layout(0, 0, measuredWidth, measuredHeight)
+        super.removeAllViews()
+        imageIndex.clear()
+        attachViewHolder()
         onDetachedFromWindow()
         onAttachedToWindow()
-        requestLayout()
+        //requestLayout()
         // 在开始不执行这个步骤的话就画不出来 很迷的操作
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444)
+        val bitmap = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_4444)
         val canvas = Canvas(bitmap)
         canvas.drawColor(ContextCompat.getColor(context, R.color.c_ffffff))
         draw(canvas)
@@ -204,9 +250,21 @@ class ViewCaptureLayout: RelativeLayout {
 
     // 用于发送回调Bitmap
     private fun getViewShotAndCallback() {
+        if (Looper.getMainLooper().thread == Thread.currentThread()) {
+            getViewShotAndCallbackThreadUnSafe()
+        } else {
+            Observable.just(null).observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { getViewShotAndCallbackThreadUnSafe() }
+        }
+    }
+
+    // 请在UI线程调用，非UI线程请调用getViewShotAndCallback()
+    @Suppress("MemberVisibilityCanBePrivate")
+    @UiThread
+    fun getViewShotAndCallbackThreadUnSafe() {
         onShotCallback?.let {
-            invalidate()
-            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444)
+            //invalidate()
+            val bitmap = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_4444)
             val canvas = Canvas(bitmap)
             canvas.drawColor(ContextCompat.getColor(context, R.color.c_ffffff))
 

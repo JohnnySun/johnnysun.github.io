@@ -9,6 +9,8 @@ date: '2018-11-18'
 
 摘要：随着富媒体社交的兴起，越来越多的App开始在社交分享中拼接分享的内容，本文的主要内容就是在不添加到AttachToViewTree的情况下将一个ViewGroup里的内容完成加载并截图。
 
+2019-1-31 更新， 如果需要在截图中表现出阴影，可以通过关闭框架的硬件加速，让android对该view使用软阴影，就可以截出带阴影的图片了`setLayerType(View.LAYER_TYPE_SOFTWARE, null);`
+
 最近我们的App开始加入了越来越多的内容图片分享，比如小程序分享卡片 要做成这样的
 ![MiniProgramShare](https://i.imgur.com/kf5B7A4.png)
 还有一些微信朋友圈长图片分享的

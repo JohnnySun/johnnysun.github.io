@@ -19,6 +19,12 @@ PS：最近在考虑将统计学或者机器学习应用于Res_layout的Inflate�
 ## Android Sys绘制View的流程:
 ![Imgur](https://i.imgur.com/aQS9u5R.png)
 
+ 这里的细节我之前做了个ppt，这里截出一点关键信息供大家了解系统绘制的流程
+
+![Imgur](https://i.imgur.com/IKnmgDk.png)
+ 这里的DisplayList就是就是DectorView.getDisplayList 后根据每一个View的OnDraw方法生成的DisplayList，Android会通过这个displayList与上一帧的DisplayList比较，确定哪里需要重新绘制
+
+![Imgur](https://i.imgur.com/hIHEfIc.png)
 ## 造成安卓卡顿的几大原因
 
  1. View的Inflate
@@ -34,15 +40,20 @@ PS：最近在考虑将统计学或者机器学习应用于Res_layout的Inflate�
 
 > 这里不介绍关于View初始化开销过大的原因，各种自定义View太多，这里我们下面会讲述两个解决这部分问题的思路
 
-为什么层级的嵌套会影响性能：
+#### 为什么层级的嵌套会影响性能：
 
 1.  首先是在XML的层面，  因为层级嵌套的很多，在Parse XML的时候会相对于少层级或者单层级的布局多创建很多的ViewGroup，每多一个ViewGrop，而每一个ViewGourp创建都是有开销的
 2.  其次是在Measure中，这里我们先说一下单一ViewGroup的Measure流程，ViewGroup在确定其中的所有子View的大小， margain后根据情况确定自己的大小，然后完成Measure的流程，但是在多层级嵌套的View中，ViewGroup会递归的调用子ViewGroup的Measure方法，  当层级嵌套非常多后，这里的开销就会变得异常的大。
 3.  在Layout中的原因和在Measure中类似，这里就不再讲述一遍了。
 4.  Draw这里引入一个新的概念，过度绘制，  系统会按照View的层级依次进行绘制，只要是View有背景色，这里都会进行一次绘制，刷新像素点。如果当前视图存在很多被盖住的View。系统也会依次把他们在屏幕上进行绘制。这里有个例外，如果背景是全透明的，那这部分的区域就不会被重新绘制。  绘制的时间开销也是影响流畅度的很大原因。
+5. RenderThread收到了复杂的Displaylist数据，需要花费更多的时间确定到底是哪里的displaylist发生了实质性的改变
 
+#### 过度绘制对性能的影响：
+1. RendeThread会遍历DisplayList 每找到一个带有颜色图层，会将该图层处理成顶点与纹理，通过GLES API交由GPU绘制其中每一次的GLES API的调用都会造成一部分的驱动开销（这里叫做一次draw call），新的Android系统中由于底层有Batching技术的存在，会合并多个具有共同纹理的绘制请求，能部分缓解这个问题。
+2. 纹理信息会通过soc内部总线交由gpu，由GPU进行绘制。这里有部分比较差的soc可能总线带宽不够，导致GPU喂不饱，造成渲染的变慢，也有可能要绘制的像素太多，GPU填充速率不够，也可能导致卡顿。
+3. 还有部分场景过度绘制Bitmap，在N之前Bitmap的内存是存储在Java的堆内存里的，每次使用的时候都需要去Copy一份到Native中，这里如果有许多没有被显示的bitmap也进行了绘制，这部分的拷贝操作对内存带宽也是不小的开销。 
 
-这里来说一下动画印象性能的问题：
+#### 这里来说一下动画印象性能的问题：
 这一点是平时最容易被忽略的，我以Fresco为例，我们的工程中在Fresco中封装了WebImageView，在这里我们为了实现在网络图片加载出来的时候由默认图渐变为网络图片，在封装中直接给WebImageView设置了渐变效果，但是我们的WebImageView被大量的应用在了ViewHolder中，而且这两年富媒体是大趋势，我们的App中WebImageView的使用率大大提升，由于Fresco的缓存机制，有很多图片都能够在缓存中命中。这样就出现了一个很严重的性能问题。当app在稍微快速滑动的时候，系统的性能很大程度上都被用于无用的，用户无法感知的渐变动画上了。每一个在ViewHolder的中的WebImageView在被重新bind的时候，基本都会换图片，然而不管怎么样，渐变动画基本在现在的逻辑上都会执行，而从缓存中取得的图片基本速度很快，用户感知不到，导致在屏幕下不可见bind的时候就已经开始在执行动画了， 而当用户网速很快的时候，快速滑动也没有关闭Fresco的图片加载管道，导致了大量的图片完成后更新Ui的动画。
 
 Fresco会使用渐变的方式进行图片的更新，这会导致两个很大的问题，一个是由于我们大量的使用了Fresco进行图片加载，导致用户在滑动的时候会有大量的动画同时进行，大量的更新的UI回掉，在调试中表现出消耗了大量的CPU时间，这部分可能是fresco渐变实现的问题，这里我没有深入探究， 那我说下他导致的第二个问题，在大量做动画的同时，也导致了大量的GPU区域重绘由于渐变效果会更新图片覆盖的整个区域，在做渐变的同时GPU也会去重新刷新着部分绘制的区域。
